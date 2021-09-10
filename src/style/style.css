@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap');
+
+
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.terminal-list {
+    width: 100%;
+}
+
+.container-element {
+    display: flex;
+}
+
+.button-remove {
+    width: 50px;
+    margin: 5px 0;
+    margin-left: 5px;
+}
+
+.terminal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+}
+
+.rotation-element {
+    font-size: 0.8rem;
+    margin: 5px 0;
+}
+.add-cargo {
+    padding-left: 30px;
+}
+
+.item-name, .new-elements select {
+    border: 1px solid black;
+    border-radius: 3px;
+    margin: 5px 0;
+    padding: 7px;
+    width: 100%;
+}
+
+.cargo-list {
+    padding-left: 30px;
+}
+
+.rotation-title {
+    text-align: center;
+}
