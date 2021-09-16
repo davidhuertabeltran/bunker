@@ -49,6 +49,24 @@ function Rotation() {
     function removeTerminal(id) {
         const newList = terminalList.filter((item) => item.id !== id);
         addToTerminalList(newList);
+        // var array = [...terminalList];
+        // console.log(array);
+        // var index = array.indexOf(id)
+        // console.log(index);
+        // if (index !== -1) {
+        //     array.splice(index, 1);
+        //     addToTerminalList(array)
+        // }
+        // console.log(array);
+        // console.log(terminalList);
+        // let newList = [...terminalList];
+        // newList.forEach((item, index) => {
+        //     if (item.id === id) {
+        //         newList.splice(index, 1);
+        //     } 
+        // })
+        // console.log(newList)
+        // addToTerminalList(newList);
     }
 
     async function submitRotation() {
@@ -60,7 +78,7 @@ function Rotation() {
 
     async function postData() {
         const terminalsArray = terminalList.map(terminal => {
-            return { "id": terminal.id }
+            return { "id": terminal.id, "cargoIds": [] } //here missing the cargo id
         })
         const url = "https://dev.solvexus.com/api/recruitment/saverotation";
         const data = {

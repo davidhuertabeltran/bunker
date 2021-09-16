@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useEffect } from "react/cjs/react.development";
 import AddItem from "./AddItem";
 import Cargo from "./Cargo";
 
 function Terminal({ terminal, cargoes, removeTerminal }) {
+    console.log('Rerendering terminal: ', terminal.name)
     const [cargoList, addToCargoList] = useState([]);
-
     function addCargo(e) {
         e.preventDefault();
         let obj = JSON.parse(e.target.value);
@@ -30,7 +31,7 @@ function Terminal({ terminal, cargoes, removeTerminal }) {
                 cargoList.map((cargo) => {
                     return (
                         <>
-                            <Cargo key={cargo.id} cargo={cargo} removeCargo={removeCargo} />   
+                            <Cargo key={cargo.id} cargo={cargo} removeCargo={removeCargo} terminalId={terminal.id}/>   
                         </>
                     )
                 })
