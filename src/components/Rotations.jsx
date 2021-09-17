@@ -6,13 +6,17 @@ function Rotation() {
 
     const [terminals, setTerminal] = useState(null);
     const [cargoes, setCargoes] = useState(null);
-    const [terminalList, addToTerminalList] = useState([]);
-    
+    const [terminalList, setTerminalList] = useState([]);
 
     async function fetchTerminal() {
         const url = new URL('https://dev.solvexus.com/api/recruitment/terminals');
         const response = await fetch(url.toJSON());
         const data = await response.json();
+
+        data.forEach(terminal => {
+            terminal.cargoes = [];
+        });
+
         setTerminal(data);
     }
 
@@ -28,13 +32,13 @@ function Rotation() {
         fetchCargoes();
     }, [])
 
-    if(terminals === null) {
+    if (terminals === null) {
         return (
             <h2>Loading terminal...</h2>
         )
     }
 
-    if(cargoes === null) {
+    if (cargoes === null) {
         return (
             <h2>Loading cargoes...</h2>
         )
@@ -43,30 +47,12 @@ function Rotation() {
     function addTerminal(e) {
         e.preventDefault();
         let obj = JSON.parse(e.target.value);
-        addToTerminalList(terminalList.concat(obj));
+        setTerminalList(terminalList.concat(obj));
     }
 
     function removeTerminal(id) {
         const newList = terminalList.filter((item) => item.id !== id);
-        addToTerminalList(newList);
-        // var array = [...terminalList];
-        // console.log(array);
-        // var index = array.indexOf(id)
-        // console.log(index);
-        // if (index !== -1) {
-        //     array.splice(index, 1);
-        //     addToTerminalList(array)
-        // }
-        // console.log(array);
-        // console.log(terminalList);
-        // let newList = [...terminalList];
-        // newList.forEach((item, index) => {
-        //     if (item.id === id) {
-        //         newList.splice(index, 1);
-        //     } 
-        // })
-        // console.log(newList)
-        // addToTerminalList(newList);
+        setTerminalList(newList);
     }
 
     async function submitRotation() {
@@ -74,25 +60,53 @@ function Rotation() {
             console.log(data)
         })
     }
-    
 
     async function postData() {
         const terminalsArray = terminalList.map(terminal => {
-            return { "id": terminal.id, "cargoIds": [] } //here missing the cargo id
+            let cargoes = terminal.cargoes.map(c => {
+                return c.id;
+            })
+            return { "id": terminal.id, "cargoIds": cargoes }
         })
         const url = "https://dev.solvexus.com/api/recruitment/saverotation";
         const data = {
             "terminals": terminalsArray
         };
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
+                'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify(data)
         });
         return response.json();
+    }
+
+    function addCargo(e, terminal) {
+        let cargo = JSON.parse(e.target.value);
+        let newTerminalList = [...terminalList];
+        newTerminalList.forEach(t => {
+            if (t.id === terminal.id) {
+                t.cargoes.push(cargo);
+            }
+        })
+
+        setTerminalList(newTerminalList);
+    }
+
+    function removeCargo(cargoId, terminalId) {
+        let newTerminalList = [...terminalList];
+        newTerminalList.forEach(terminal => {
+            if (terminal.id === terminalId) {
+                let newCargoes = terminal.cargoes.filter(cargo => {
+                    return cargo.id !== cargoId;
+                });
+                terminal.cargoes = newCargoes;
+            }
+        })
+        setTerminalList(newTerminalList);
     }
 
     return (
@@ -102,7 +116,7 @@ function Rotation() {
                 terminalList.map((terminal) => {
                     return (
                         <>
-                            <Terminal key={terminal.id} terminal={terminal} cargoes={cargoes} removeTerminal={removeTerminal}/> 
+                            <Terminal key={terminal.id} terminal={terminal} cargoes={cargoes} removeTerminal={removeTerminal} addCargo={addCargo} removeCargo={removeCargo} />
                         </>
                     )
                 })
@@ -113,7 +127,7 @@ function Rotation() {
                     return terminal;
                 }
             })} addItem={addTerminal} />
-            
+
             <button onClick={submitRotation}>Submit</button>
         </div>
     )

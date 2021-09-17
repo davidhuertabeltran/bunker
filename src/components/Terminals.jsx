@@ -1,21 +1,7 @@
-import { useState } from "react";
-import { useEffect } from "react/cjs/react.development";
 import AddItem from "./AddItem";
 import Cargo from "./Cargo";
 
-function Terminal({ terminal, cargoes, removeTerminal }) {
-    console.log('Rerendering terminal: ', terminal.name)
-    const [cargoList, addToCargoList] = useState([]);
-    function addCargo(e) {
-        e.preventDefault();
-        let obj = JSON.parse(e.target.value);
-        addToCargoList(cargoList.concat(obj));
-    }
-
-    function removeCargo(id) {
-        const newList = cargoList.filter((item) => item.id !== id);
-        addToCargoList(newList);
-    }
+function Terminal({ terminal, cargoes, removeTerminal, addCargo, removeCargo }) {
 
     return (
         <div className="terminal-list">
@@ -26,12 +12,12 @@ function Terminal({ terminal, cargoes, removeTerminal }) {
                     removeTerminal(terminal.id);
                 }}>X</button>
             </div>
-            
+
             {
-                cargoList.map((cargo) => {
+                terminal.cargoes.map((cargo) => {
                     return (
                         <>
-                            <Cargo key={cargo.id} cargo={cargo} removeCargo={removeCargo} terminalId={terminal.id}/>   
+                            <Cargo key={cargo.id} cargo={cargo} removeCargo={removeCargo} terminalId={terminal.id}/>
                         </>
                     )
                 })
@@ -39,12 +25,12 @@ function Terminal({ terminal, cargoes, removeTerminal }) {
             <div className="add-cargo">
                 <p className="rotation-element">Cargo</p>
                 <AddItem items={cargoes.filter(cargo => {
-                if (cargoList.filter(e => e.id === cargo.id).length === 0) {
-                    return cargo;
-                }
-            })} addItem={addCargo}/>
+                    if (terminal.cargoes.filter(e => e.id === cargo.id).length === 0) {
+                        return cargo;
+                    }
+            })} addItem={(e) => addCargo(e, terminal)}/>
             </div>
-            
+
         </div>
     )
 }

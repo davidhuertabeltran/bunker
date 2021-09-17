@@ -7,8 +7,8 @@ function AddItem({ items, addItem }) {
    
     return (
         <div className="new-elements">
-            <select name="items" id="terminals" onChange={handleChange}>
-                <option selected disabled value="all"> -- add -- </option>
+            <select name="items" id="terminals" onChange={handleChange} value="all">
+                <option disabled value="all"> -- add -- </option>
                 {
                     items.map((item, index) => {
                         return(

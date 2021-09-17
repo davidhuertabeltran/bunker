@@ -5,10 +5,10 @@ function Cargo( {cargo, removeCargo, terminalId}) {
             <div className="container-element">
                 <div className="item-name" id={terminalId}>{cargo.name}</div>
                 <button className="button-remove" onClick={() => {
-                    removeCargo(cargo.id)
+                    removeCargo(cargo.id, terminalId)
                 }}>X</button>
             </div>
-            
+
         </div>
     )
 }
